@@ -7,6 +7,8 @@ fun hasControlChars(s: String): Boolean = s.any { it.isISOControl() }
 fun hasOuterWhitespace(s: String): Boolean =
     (s.firstOrNull()?.isWhitespace() ?: false) || (s.lastOrNull()?.isWhitespace() ?: false)
 
+// Бросает IllegalArgumentException, если value пустая, содержит управляющие
+// символы или начинается/заканчивается пробельным символом
 fun requireValidText(value: String, fieldName: String) {
     require(value.isNotBlank()) { "$fieldName must not be blank" }
     require(!hasControlChars(value)) { "$fieldName must not contain control char" }
