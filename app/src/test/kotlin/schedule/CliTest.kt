@@ -14,7 +14,17 @@ class CliTest {
     fun parsesAllCommandsAndOptionOrders() {
         assertEquals(
             Command.Period("samples/clean.txt", LocalDate.of(2026, 9, 28), LocalDate.of(2027, 5, 13)),
-            parseCommand(arrayOf("period", "--to", "2027-05-13", "--file", "samples/clean.txt", "--from", "2026-09-28")),
+            parseCommand(
+                arrayOf(
+                    "period",
+                    "--to",
+                    "2027-05-13",
+                    "--file",
+                    "samples/clean.txt",
+                    "--from",
+                    "2026-09-28"
+                )
+            ),
         )
         for (type in SessionType.entries) {
             assertEquals(
@@ -47,7 +57,7 @@ class CliTest {
             arrayOf("type", "--type", "SEMINAR", "--file", "x"),
         ) + listOf("0000-01-01", "10000-01-01", "2026-02-29", "2026-13-01", "2026-1-01", " 2026-01-01")
             .map { arrayOf("period", "--file", "x", "--from", it, "--to", "2027-05-13") } +
-            listOf(arrayOf("period", "--file", "x", "--from", "2027-01-01", "--to", "2026-01-01"))
+                listOf(arrayOf("period", "--file", "x", "--from", "2027-01-01", "--to", "2026-01-01"))
         for (args in cases) {
             val handler = RecordingHandlers()
             val output = mutableListOf<String>()

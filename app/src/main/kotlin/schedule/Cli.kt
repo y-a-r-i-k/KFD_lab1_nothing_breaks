@@ -48,11 +48,13 @@ fun parseCommand(args: Array<String>): Command {
             if (from > to) throw InvalidArgumentsException()
             Command.Period(file, from, to)
         }
+
         "type" -> {
             val type = SessionType.entries.firstOrNull { it.name == values.getValue("--type") }
                 ?: throw InvalidArgumentsException()
             Command.ByType(file, type)
         }
+
         else -> Command.Errors(file)
     }
 }
