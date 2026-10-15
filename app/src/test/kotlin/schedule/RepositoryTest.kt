@@ -11,17 +11,26 @@ import schedule.model.Session
 import schedule.repo.AuditEvent
 import schedule.repo.AuditedSessionRepository
 import schedule.repo.InMemorySessionRepository
-import kotlin.test.assertSame
 
 class RepositoryTest {
     private val date = LocalDate.of(2026, 10, 5)
+
+    @Test
+    fun originalListChangeDoesNotAffectSession() {
+        val names = mutableListOf("Ivanov", "Petrov")
+        val exam = Exam(date, "Oral exam", "Room 401", names)
+
+        names.clear()
+
+        assertEquals(listOf("Ivanov", "Petrov"), exam.teachers)
+    }
 
     @Test
     fun teachersListFromSessionCannotBeModified() {
         val exam = Exam(date, "Oral exam", "Room 401", listOf("Ivanov", "Petrov"))
 
         assertFailsWith<UnsupportedOperationException> {
-            (exam.teachers as MutableList<String>).add("Hacker") // Меняем список полученный их Exam
+            (exam.teachers as MutableList<String>).add("Hacker")
         }
 
         assertEquals(listOf("Ivanov", "Petrov"), exam.teachers)
@@ -49,17 +58,16 @@ class RepositoryTest {
         val second = listOf<Session>(
             Lecture(date, "Algebra", "Room 67", listOf("Ivanov", "Petrov")),
             Lecture(date, "Kotlin", "online", listOf("Nikita")),
-            Lecture(date, "English", "Room 318", listOf("Antonova"))
+            Lecture(date, "English", "Room 318", listOf("Antonova")),
         )
         repo.addAll(second)
 
         assertEquals(4, repo.all().size)
         assertEquals(4, repo.totalAdded)
         assertEquals(
+            listOf(AuditEvent("add", 1), AuditEvent("addAll", 3)),
             repo.auditLog,
-            listOf(AuditEvent("add", 1), AuditEvent("addAll", 2))
         )
-
     }
 
     @Test
