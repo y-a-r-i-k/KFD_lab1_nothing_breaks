@@ -15,7 +15,7 @@ fun requireValidText(value: String, fieldName: String) {
     require(!hasOuterWhitespace(value)) { "$fieldName must not contain outer whitespace" }
 }
 
-fun requireValidActiveSession(location: String, teachers: List<String>, minTeachers: Int = 0) {
+fun requireValidActiveSession(location: String, teachers: List<String>, minTeachers: Int = 1) {
     requireValidText(location, "location")
 
     require(location != "-") { "Location must not be '-'" }
